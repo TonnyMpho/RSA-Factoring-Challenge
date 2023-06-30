@@ -1,14 +1,28 @@
 #!/usr/bin/python3
 
 from sys import argv
+from math import sqrt
 
 
 def factorization(n):
-    for n1 in range(2, n // 2 + 1):
-        n2 = n // n1
-        if n1 * n2 == n:
-            print("{}={}*{}".format(n, n2, n1))
-            break
+    factors = []
+
+    if n % 2 == 0:
+        factors.append((2, n // 2))
+        return factors
+
+    root = int(sqrt(n))
+
+    if root % 2 == 0:
+        root += 1
+
+    for i in range(3, root + 1, 2):
+        if n % i == 0:
+            factors.append((i, n // i))
+            return factors
+
+    factors.append((n, 1))
+    return factors
 
 def main():
     if (len(argv) != 2):
@@ -18,7 +32,13 @@ def main():
     with open(argv[1], "r") as file:
         for i in file:
             num = int(i.strip())
-            factorization(num)
+            factors = factorization(num)
+
+            for n in factors:
+                n1, n2 = n
+                print("{}={}*{}".format(num, n2, n1))
+                break
+
 
 if __name__=="__main__":
     main()
